@@ -1,0 +1,25 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "controle-estoque-b1545",
+          "appId": "1:104425633657:android:a9655919bca557cea2a1a8",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "controle-estoque-b1545",
+          "configurations": {
+            "android": "1:104425633657:android:a9655919bca557cea2a1a8",
+            "web": "1:104425633657:web:61b6984f72789a40a2a1a8"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

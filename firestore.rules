@@ -1,0 +1,52 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Todas as coleções do aplicativo pertencem ao usuário autenticado.
+    // O aplicativo sempre grava o campo usuarioId com o UID do Firebase Auth.
+    function autenticado() {
+      return request.auth != null;
+    }
+
+    function donoDoDocumento(data) {
+      return autenticado() && data.usuarioId == request.auth.uid;
+    }
+
+    // =========================
+    // PRODUTOS
+    // =========================
+    match /produtos/{produtoId} {
+      allow get, list: if donoDoDocumento(resource.data);
+      allow create: if donoDoDocumento(request.resource.data);
+      allow update: if donoDoDocumento(resource.data)
+                    && donoDoDocumento(request.resource.data);
+      allow delete: if donoDoDocumento(resource.data);
+    }
+
+    // =========================
+    // CATEGORIAS
+    // =========================
+    match /categorias/{categoriaId} {
+      allow get, list: if donoDoDocumento(resource.data);
+      allow create: if donoDoDocumento(request.resource.data);
+      allow update: if donoDoDocumento(resource.data)
+                    && donoDoDocumento(request.resource.data);
+      allow delete: if donoDoDocumento(resource.data);
+    }
+
+    // =========================
+    // MOVIMENTAÇÕES
+    // =========================
+    match /movimentacoes/{movimentacaoId} {
+      allow get, list: if donoDoDocumento(resource.data);
+      allow create: if donoDoDocumento(request.resource.data);
+      // Histórico é imutável pelo aplicativo.
+      allow update, delete: if false;
+    }
+
+    // Qualquer coleção não prevista fica bloqueada.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
